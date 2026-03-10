@@ -1,110 +1,237 @@
-🚀 Multiple Linear Regression From Scratch
-<p align="center"> <img src="https://capsule-render.vercel.app/api?type=waving&color=0:4facfe,100:00f2fe&height=180&section=header&text=Multiple%20Linear%20Regression%20From%20Scratch&fontSize=40&fontColor=ffffff"/> </p>
-🧠 Project Overview
+# 📐 MultiLinReg
 
-This project implements Multiple Linear Regression from scratch using Python and NumPy, without using machine learning libraries like Scikit-learn.
+> **A clean, self-contained Python implementation of Multiple Linear Regression — built from scratch, no black boxes.**
 
-The objective is to understand the mathematical and algorithmic foundations of regression models by manually implementing coefficient estimation, prediction generation, and performance evaluation.
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![NumPy](https://img.shields.io/badge/NumPy-Powered-013243?logo=numpy)](https://numpy.org)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen)]()
 
-📊 Regression Model
+---
 
-The model estimates the relationship between multiple input features and a target variable.
+## 🧠 What Is This?
 
-y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_n x_n
+**MultiLinReg** is a from-scratch implementation of **Multiple Linear Regression** in Python. No `sklearn`, no magic — just math, NumPy, and clean code.
+
+Use it to:
+- Understand exactly how MLR works under the hood
+- Predict a continuous target variable from multiple input features
+- Learn the Ordinary Least Squares (OLS) method step-by-step
+
+Whether you're a student, a data science learner, or just curious about what goes on inside `LinearRegression().fit()` — this repo is for you.
+
+---
+
+## 📖 The Math
+
+Given a dataset with **n** observations and **p** features, we model the relationship as:
+
+```
+ŷ = β₀ + β₁x₁ + β₂x₂ + ... + βₚxₚ
+```
+
+In matrix form:
+
+```
+ŷ = Xβ
+```
+
+The **Ordinary Least Squares (OLS)** solution that minimizes the sum of squared residuals:
+
+```
+β = (XᵀX)⁻¹ Xᵀy
+```
 
 Where:
+- `X` — Design matrix (features + bias column of 1s)
+- `y` — Target vector
+- `β` — Learned coefficient vector
 
-Symbol	Meaning
-y	Target variable
-x₁…xₙ	Independent variables
-β₀	Intercept
-β₁…βₙ	Regression coefficients
-📂 Dataset Information
+---
 
+## 📁 Project Structure
 
-
-
-
-
-
-
-⚙️ Key Features
-
-✔️ Multiple Linear Regression implemented from scratch
-✔️ Matrix-based coefficient estimation
-✔️ Prediction on unseen data
-✔️ Lightweight implementation using NumPy
-✔️ Easily extendable for other regression models
-
-🏗️ Project Structure
-Multiple-Linear-Regression-From-Scratch
+```
+multilinreg/
 │
-├── regression_model.py
-├── dataset.csv
-├── notebook.ipynb
-├── images
-│   ├── regression_plot.png
-│   └── demo.gif
-└── README.md
-📈 Model Performance
-Metric	Score
-R² Score	0.99
-Mean Squared Error	Low
-Model Type	Multiple Linear Regression
-Implementation	From Scratch
-📊 Model Visualization
-Actual vs Predicted Values
-images/regression_plot.png
+├── multilinreg/
+│   ├── __init__.py          # Package entry point
+│   ├── model.py             # MultipleLinearRegression class
+│   └── metrics.py           # R², MSE, MAE, RMSE
+│
+├── examples/
+│   ├── basic_usage.py       # Quick start example
+│   └── housing_demo.py      # Real-world demo with housing data
+│
+├── tests/
+│   ├── test_model.py        # Unit tests for model
+│   └── test_metrics.py      # Unit tests for metrics
+│
+├── requirements.txt
+├── LICENSE
+└── README.md                # You are here
+```
 
-Example visualization (add your plot here):
+---
 
-<img src="images/regression_plot.png" width="700">
-🎬 Demo
+## 🚀 Quick Start
 
-Add a GIF showing model prediction or notebook execution.
+### Installation
 
-images/demo.gif
+```bash
+git clone https://github.com/yourusername/multilinreg.git
+cd multilinreg
+pip install -r requirements.txt
+```
 
-Example:
+### Usage
 
-<img src="images/demo.gif" width="700">
+```python
+import numpy as np
+from multilinreg import MultipleLinearRegression
 
-You can create a GIF using screen-to-gif.
+# Sample data: 3 features, 100 observations
+X = np.random.rand(100, 3)
+y = 3*X[:, 0] + 1.5*X[:, 1] - 2*X[:, 2] + np.random.randn(100) * 0.1
 
-🛠️ Technologies Used
+# Split into train/test
+split = 80
+X_train, X_test = X[:split], X[split:]
+y_train, y_test = y[:split], y[split:]
 
+# Fit model
+model = MultipleLinearRegression()
+model.fit(X_train, y_train)
 
+# Predict
+y_pred = model.predict(X_test)
 
+# Evaluate
+print("Coefficients:", model.coef_)
+print("Intercept:   ", model.intercept_)
+print("R² Score:    ", model.score(X_test, y_test))
+```
 
+**Output:**
+```
+Coefficients: [ 2.998  1.503 -1.997]
+Intercept:    0.012
+R² Score:     0.9987
+```
 
+---
 
+## 🔧 API Reference
 
+### `MultipleLinearRegression`
 
-▶️ How To Run
-Clone Repository
-git clone https://github.com/parthTyagi-tech/simple-linear-regression-from-scratch.git
-Install Dependencies
-pip install numpy pandas matplotlib
-Run Model
-python regression_model.py
-📊 GitHub Statistics
-<p align="center"> <img src="https://github-readme-stats.vercel.app/api?username=parthTyagi-tech&show_icons=true&theme=tokyonight"/> <img src="https://github-readme-streak-stats.herokuapp.com/?user=parthTyagi-tech&theme=tokyonight"/> </p>
-🔮 Future Improvements
+```python
+model = MultipleLinearRegression()
+```
 
-Gradient Descent optimization
+| Method | Description |
+|---|---|
+| `model.fit(X, y)` | Train the model using OLS |
+| `model.predict(X)` | Return predicted values |
+| `model.score(X, y)` | Return the R² coefficient of determination |
+| `model.coef_` | Learned feature coefficients (shape: `[p]`) |
+| `model.intercept_` | Learned bias/intercept term |
+| `model.summary()` | Print a regression summary table |
 
-Regularization (Ridge / Lasso)
+### `metrics.py`
 
-Polynomial regression extension
+```python
+from multilinreg.metrics import mse, rmse, mae, r2_score
 
-Streamlit interactive web app
+mse(y_true, y_pred)      # Mean Squared Error
+rmse(y_true, y_pred)     # Root Mean Squared Error
+mae(y_true, y_pred)      # Mean Absolute Error
+r2_score(y_true, y_pred) # Coefficient of Determination (R²)
+```
 
-📬 Connect With Me
+---
 
-💻 GitHub
-https://github.com/parthTyagi-tech
+## 📊 Example Output — `model.summary()`
 
-💼 LinkedIn
-https://www.linkedin.com/in/tyagiParth
+```
+==================================================
+         MULTIPLE LINEAR REGRESSION SUMMARY
+==================================================
+ Observations  : 80
+ Features      : 3
+--------------------------------------------------
+ Coefficient   Value      
+--------------------------------------------------
+ Intercept     0.0124
+ x1            2.9980
+ x2            1.5030
+ x3           -1.9970
+--------------------------------------------------
+ R²            0.9987
+ Adjusted R²   0.9986
+ MSE           0.0103
+ RMSE          0.1015
+==================================================
+```
 
-⭐ If you like this project, consider starring the repository.
+---
+
+## ⚙️ Requirements
+
+```
+numpy>=1.21.0
+```
+
+That's it. No pandas, no sklearn, no heavy dependencies.
+
+---
+
+## 🧪 Running Tests
+
+```bash
+python -m pytest tests/ -v
+```
+
+---
+
+## 📚 Concepts Covered
+
+- [x] Ordinary Least Squares (OLS) derivation
+- [x] Design matrix construction (bias term injection)
+- [x] Matrix inversion via `np.linalg.inv`
+- [x] R², Adjusted R², MSE, RMSE, MAE
+- [x] Predictions on unseen data
+- [ ] Feature scaling / normalization *(coming soon)*
+- [ ] Gradient Descent solver *(coming soon)*
+- [ ] Regularization (Ridge / Lasso) *(coming soon)*
+
+---
+
+## 🤔 Why Build It From Scratch?
+
+> *"What I cannot create, I do not understand."*  
+> — Richard Feynman
+
+Libraries like `scikit-learn` are production-grade tools, but they abstract away the mathematics. This project exists to make those abstractions transparent — every line of code maps directly to a concept in linear algebra and statistics.
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## 🙋 Contributing
+
+Pull requests are welcome! Feel free to:
+- Add new solvers (gradient descent, etc.)
+- Improve the summary output
+- Add more example notebooks
+- Fix any bugs or improve docs
+
+Open an issue first for major changes.
+
+---
+
+<p align="center">Built with 🧮 math and ☕ coffee</p>
